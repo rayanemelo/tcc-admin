@@ -51,7 +51,7 @@ export function AppSidebar() {
               <AlertDialog
                 title="Você tem certeza?"
                 description="Deseja realmente sair?"
-                onConfirmNavigateTo="/api/logout"
+                onConfirmNavigateTo="/"
               >
                 <AppSidebarMenuItem key="Sair" title="Sair" icon="LogOut" />
               </AlertDialog>

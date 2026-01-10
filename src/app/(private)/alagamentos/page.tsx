@@ -4,6 +4,7 @@ import { useMemo, useState } from "react"
 import { AlagamentosFilters } from "./components/alagamentos-filters"
 import { AlagamentosTable } from "./components/alagamentos-table"
 
+// FIXME: Remove mock data and integrate with backend API
 const MOCK_DATA = [
   {
     id: "1",
@@ -49,7 +50,7 @@ export default function AlagamentosPage() {
   }, [nivel, status])
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-6">
       <header className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <h1 className="text-2xl font-semibold">
           Análise de Alagamentos
