@@ -13,7 +13,7 @@ import { AlertDialog } from "../alert-dialog/alert-dialog";
 const items: SidebarMenuOption[] = [
   {
     title: "Análise de Alagamentos",
-    url: "/analise-de-alagamentos",
+    url: "/alagamentos",
     icon: "Waves",
   },
   {

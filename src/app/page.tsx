@@ -26,7 +26,8 @@ export function LoginForm() {
 
     setTimeout(() => {
       setLoading(false)
-    }, 1500)
+      window.location.href = "/home"
+    }, 1000)
   }
 
   return (
@@ -73,7 +74,6 @@ export function LoginForm() {
         </div>
       </div>
 
-      {/* Botão */}
       <Button type="submit" className="w-full" disabled={loading}>
         {loading ? "Entrando..." : "Entrar"}
       </Button>
