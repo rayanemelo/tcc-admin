@@ -7,27 +7,40 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { ButtonWithLoader } from '@/components/button-with-loader/button-with-loader';
+import { DialogDescription } from '@radix-ui/react-dialog';
 
 type Props = {
-  open: boolean;
   onClose: () => void;
-  onConfirm: () => void;
+  onConfirm: () => Promise<void>;
+  isDeleting: boolean;
 };
 
-export function FaqDeleteModal({ open, onClose, onConfirm }: Props) {
+export function FaqDeleteModal({ onClose, onConfirm, isDeleting }: Props) {
+  async function handleConfirm() {
+    await onConfirm();
+    onClose();
+  }
+
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open onOpenChange={onClose}>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
           <DialogTitle>Deseja realmente excluir esta pergunta?</DialogTitle>
+          <DialogDescription className="text-sm">
+            Esta ação não poderá ser desfeita.
+          </DialogDescription>
         </DialogHeader>
-
         <div className="flex justify-end gap-2 pt-4">
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" onClick={onClose} disabled={isDeleting}>
             Cancelar
           </Button>
-
-          <Button onClick={onConfirm}>Excluir</Button>
+          <ButtonWithLoader
+            onClick={handleConfirm}
+            disabled={isDeleting}
+            isLoading={isDeleting}
+            text="Excluir"
+          />
         </div>
       </DialogContent>
     </Dialog>

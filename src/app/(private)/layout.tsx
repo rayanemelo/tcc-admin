@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/app-sidebar/app-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AppSidebar } from '@/components/app-sidebar/app-sidebar';
+import { SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 type AdminPrivateLayoutProps = {
   children: React.ReactNode;
@@ -8,7 +8,6 @@ type AdminPrivateLayoutProps = {
 export default function PrivateLayout({
   children,
 }: Readonly<AdminPrivateLayoutProps>) {
-
   return (
     <SidebarProvider defaultOpen={true}>
       <AppSidebar />

@@ -39,9 +39,12 @@ export const MOCK_FLOOD_AREAS: FloodArea[] = [
   },
 ];
 
-const LeafletMap = dynamic(() => import('@/components/leaflet-map'), {
-  ssr: false,
-});
+const LeafletMap = dynamic(
+  () => import('@/components/leaflet-map/leaflet-map'),
+  {
+    ssr: false,
+  }
+);
 
 export default function MapaPage() {
   return (

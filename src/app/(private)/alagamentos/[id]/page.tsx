@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Textarea } from '@/components/ui/textarea';
 import { nivelVariant, statusVariant } from '@/utils/styles';
-import { IAAnalysis } from '@/components/ia-analysis';
+import { IAAnalysis } from '@/components/ia-analysis/ia-analysis';
 
 const MOCK_DETAIL = {
   id: '1',
