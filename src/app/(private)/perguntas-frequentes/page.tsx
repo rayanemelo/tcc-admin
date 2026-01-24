@@ -4,6 +4,8 @@ import { Button } from '@/components/ui/button';
 import { FaqTable } from './components/faq-table';
 import { useFaq } from '@/hooks/use-faq';
 import { FaqModalController } from './components/faq-modal-controller';
+import { Separator } from '@/components/ui/separator';
+import { PlusIcon } from 'lucide-react';
 
 export default function FaqPage() {
   const {
@@ -24,31 +26,40 @@ export default function FaqPage() {
   } = useFaq();
 
   return (
-    <div className="min-h-screen bg-slate-50 p-8 space-y-6">
-      <div className="flex items-center justify-between bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-        <header className="flex items-center justify-between">
-          <h1 className="text-2xl font-semibold">Perguntas Frequentes (FAQ)</h1>
-          <Button onClick={onCreate}>Adicionar pergunta</Button>
-        </header>
+    <div className="space-y-6 p-6">
+      <header className="flex items-center justify-between">
+        <div className="flex flex-col">
+          <h1 className="text-2xl font-semibold text-gray-900">
+            Perguntas Frequentes
+          </h1>
+        </div>
+        <Button
+          onClick={onCreate}
+          className="flex items-center gap-2 bg-[#3B6790] text-white hover:bg-[#2C4F6E]"
+        >
+          <PlusIcon className="text-white" />
+          Nova pergunta
+        </Button>
+      </header>
+      <Separator />
 
-        <FaqTable
-          list={faqList}
-          onView={onView}
-          onEdit={onEdit}
-          onDelete={onDelete}
-          isLoading={isLoading}
-        />
+      <FaqTable
+        list={faqList}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+        isLoading={isLoading}
+      />
 
-        <FaqModalController
-          modal={modal}
-          createFaq={createFaq}
-          updateFaq={updateFaq}
-          deleteFaq={deleteFaq}
-          isDeleting={isDeleting}
-          onClose={() => setModal(null)}
-          isSaving={isCreating || isUpdating}
-        />
-      </div>
+      <FaqModalController
+        modal={modal}
+        createFaq={createFaq}
+        updateFaq={updateFaq}
+        deleteFaq={deleteFaq}
+        isDeleting={isDeleting}
+        onClose={() => setModal(null)}
+        isSaving={isCreating || isUpdating}
+      />
     </div>
   );
 }

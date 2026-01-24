@@ -6,19 +6,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { Notification } from '../page';
+import { Notification } from '@/services/notification';
 
 type Props = {
-  open: boolean;
   notification: Notification | null;
   onClose: () => void;
 };
 
-export function NotificationViewModal({ open, notification, onClose }: Props) {
+export function NotificationViewModal({ notification, onClose }: Props) {
   if (!notification) return null;
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open={true} onOpenChange={onClose}>
       <DialogContent
         onOpenAutoFocus={(e) => e.preventDefault()}
         className="max-w-lg"

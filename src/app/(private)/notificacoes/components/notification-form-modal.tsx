@@ -9,15 +9,16 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Notification } from '../page';
+import { Notification } from '@/services/notification';
+import { ButtonWithLoader } from '@/components/button-with-loader/button-with-loader';
 
 type Props = {
-  open: boolean;
+  isSaving: boolean;
   onClose: () => void;
   onSave: (n: Notification) => void;
 };
 
-export function NotificationFormModal({ open, onClose, onSave }: Props) {
+export function NotificationFormModal({ isSaving, onClose, onSave }: Props) {
   const [content, setContent] = useState('');
 
   function handleSubmit() {
@@ -34,18 +35,24 @@ export function NotificationFormModal({ open, onClose, onSave }: Props) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={onClose}>
+    <Dialog open onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Nova notificação</DialogTitle>
         </DialogHeader>
 
-        <div className="space-y-4">
+        <form
+          className="space-y-4"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
+        >
           <Textarea
             placeholder="Conteúdo da notificação"
             value={content}
             onChange={(e) => setContent(e.target.value)}
-            className="min-h-[120px]"
+            className="min-h-30"
           />
 
           <div className="flex justify-end gap-2">
@@ -53,11 +60,14 @@ export function NotificationFormModal({ open, onClose, onSave }: Props) {
               Cancelar
             </Button>
 
-            <Button onClick={handleSubmit} disabled={!content.trim()}>
-              Enviar
-            </Button>
+            <ButtonWithLoader
+              type="submit"
+              disabled={isSaving}
+              isLoading={isSaving}
+              text="Salvar"
+            />
           </div>
-        </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

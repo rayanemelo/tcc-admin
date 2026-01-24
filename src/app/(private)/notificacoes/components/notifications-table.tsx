@@ -1,57 +1,79 @@
 'use client';
 
 import { Button } from '@/components/ui/button';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
 import { Eye, Trash } from 'lucide-react';
-import { Notification } from '../page';
+
+import { BaseTable } from '@/components/base-table/base-table';
+import { Notification } from '@/services/notification';
+import { formatDateTime } from '@/utils/format-date-time';
 
 type Props = {
-  data: Notification[];
+  data: Notification[] | undefined;
+  isLoading: boolean;
   onView: (n: Notification) => void;
   onDelete: (n: Notification) => void;
 };
 
-export function NotificationsTable({ data, onView, onDelete }: Props) {
+export function NotificationsTable({
+  data,
+  isLoading,
+  onView,
+  onDelete,
+}: Props) {
   return (
-    <div className="rounded-md border bg-white">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Conteúdo</TableHead>
-            <TableHead>Criado em</TableHead>
-            <TableHead className="w-[120px] text-center">Ações</TableHead>
-          </TableRow>
-        </TableHeader>
-
-        <TableBody>
-          {data.map((n) => (
-            <TableRow key={n.id}>
-              <TableCell className="max-w-[500px] truncate">
+    <BaseTable<Notification>
+      list={data}
+      isLoading={isLoading}
+      skeleton={null}
+      emptyMessage="Nenhuma notificação encontrada."
+      columns={[
+        {
+          header: 'Conteúdo',
+          className: 'max-w-[500px] truncate',
+          cell: (n) => (
+            <div className="flex flex-col">
+              <span className="truncate font-medium text-gray-900">
                 {n.content}
-              </TableCell>
-
-              <TableCell>{n.createdAt}</TableCell>
-
-              <TableCell className="text-center space-x-1">
-                <Button variant="ghost" size="icon" onClick={() => onView(n)}>
-                  <Eye className="h-4 w-4" />
-                </Button>
-
-                <Button variant="ghost" size="icon" onClick={() => onDelete(n)}>
-                  <Trash className="h-4 w-4 text-red-500" />
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+              </span>
+              <span className="text-xs text-gray-400">ID: {n.id}</span>
+            </div>
+          ),
+        },
+        {
+          header: 'Criado em',
+          cell: (n) => (
+            <span className="text-xs text-gray-700">
+              {formatDateTime(n.createdAt)}
+            </span>
+          ),
+        },
+      ]}
+      actions={[
+        {
+          button: (n) => (
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => onView(n)}
+              className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+            >
+              <Eye className="h-4 w-4 " />
+            </Button>
+          ),
+        },
+        {
+          button: (n) => (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="text-red-500 hover:bg-red-50 hover:text-red-600"
+              onClick={() => onDelete(n)}
+            >
+              <Trash className="h-4 w-4" />
+            </Button>
+          ),
+        },
+      ]}
+    />
   );
 }
