@@ -52,7 +52,7 @@ export function BaseTable<T>({
   }
 
   return (
-    <div className="overflow-hidden rounded-xl border bg-white shadow-sm">
+    <div className="overflow-hidden rounded border bg-white shadow-sm">
       <Table>
         {/* Header fixo igual ao seu */}
         <TableHeader>
