@@ -40,11 +40,13 @@ export function AlagamentosTable({ data }: Props) {
               <button
                 type="button"
                 onClick={() => router.push(`/alagamentos/${item.id}`)}
-                className="truncate text-left font-medium text-gray-900 hover:underline"
+                className="truncate text-left font-medium text-slate-900 hover:underline dark:text-slate-100"
               >
                 {item.endereco}
               </button>
-              <span className="text-xs text-gray-400">ID: {item.id}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                ID: {item.id}
+              </span>
             </div>
           ),
         },
@@ -63,7 +65,9 @@ export function AlagamentosTable({ data }: Props) {
         {
           header: 'Data',
           cell: (item) => (
-            <span className="text-xs text-gray-700">{item.data}</span>
+            <span className="text-xs text-slate-700 dark:text-slate-300">
+              {item.data}
+            </span>
           ),
         },
       ]}
@@ -73,7 +77,7 @@ export function AlagamentosTable({ data }: Props) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+              className="text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-500/15 dark:hover:text-blue-300"
               onClick={() => router.push(`/alagamentos/${item.id}`)}
             >
               <Eye className="h-4 w-4" />
@@ -85,7 +89,7 @@ export function AlagamentosTable({ data }: Props) {
             <Button
               variant="ghost"
               size="icon"
-              className="text-red-500 hover:bg-red-50 hover:text-red-600"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/15 dark:hover:text-red-300"
               onClick={() =>
                 window.open(
                   `https://www.google.com/maps?q=${item.lat},${item.lng}`,

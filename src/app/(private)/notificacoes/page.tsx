@@ -26,7 +26,9 @@ export default function NotificationPage() {
     <div className="space-y-6 p-6">
       <header className="flex items-center justify-between">
         <div className="flex flex-col">
-          <h1 className="text-2xl font-semibold text-gray-900">Notificações</h1>
+          <h1 className="text-2xl font-semibold dark:text-white text-gray-900 ">
+            Notificações
+          </h1>
         </div>
         <Button
           onClick={onCreate}

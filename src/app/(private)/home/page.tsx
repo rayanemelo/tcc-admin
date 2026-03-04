@@ -1,3 +1,74 @@
+import Link from 'next/link';
+import {
+  Bell,
+  CircleHelp,
+  LifeBuoy,
+  Map,
+  Waves,
+  ArrowRight,
+} from 'lucide-react';
+
+const menuCards = [
+  {
+    title: 'Análise de Alagamentos',
+    href: '/alagamentos',
+    icon: Waves,
+  },
+  {
+    title: 'Mapa',
+    href: '/mapa',
+    icon: Map,
+  },
+  {
+    title: 'Notificações',
+    href: '/notificacoes',
+    icon: Bell,
+  },
+  {
+    title: 'Perguntas Frequentes',
+    href: '/perguntas-frequentes',
+    icon: CircleHelp,
+  },
+  {
+    title: 'Suporte',
+    href: '/suporte',
+    icon: LifeBuoy,
+  },
+];
+
 export default function HomePage() {
-  return <div>Home - Private Area</div>
+  return (
+    <div className="space-y-6 p-6">
+      <header className="space-y-2">
+        <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
+          Painel Administrativo
+        </h1>
+        <p className="text-sm text-slate-600 dark:text-slate-300">
+          Acesse rapidamente os módulos principais.
+        </p>
+      </header>
+
+      <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+        {menuCards.map(({ title, href, icon: Icon }) => (
+          <Link
+            key={href}
+            href={href}
+            className="group flex items-center justify-between rounded-xl border border-slate-200 bg-white p-4 shadow-sm transition-all hover:-translate-y-0.5 hover:border-[#3B6790]/40 hover:shadow-md dark:border-slate-800 dark:bg-slate-900 dark:hover:border-sky-300/40"
+          >
+            <div className="flex min-w-0 items-center gap-3">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#3B6790]/10 text-[#3B6790] dark:bg-sky-300/15 dark:text-sky-300">
+                <Icon className="h-5 w-5" />
+              </div>
+
+              <span className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                {title}
+              </span>
+            </div>
+
+            <ArrowRight className="h-4 w-4 shrink-0 text-slate-400 transition-transform group-hover:translate-x-0.5 dark:text-slate-500" />
+          </Link>
+        ))}
+      </section>
+    </div>
+  );
 }

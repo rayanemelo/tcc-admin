@@ -1,4 +1,4 @@
-"use client"
+'use client';
 
 import {
   Card,
@@ -6,28 +6,27 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import Link from "next/link"
+} from '@/components/ui/card';
+import Link from 'next/link';
 
-
-import { useState } from "react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Eye, EyeOff, Lock, Mail } from "lucide-react"
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 
 export function LoginForm() {
-  const [showPassword, setShowPassword] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
 
     setTimeout(() => {
-      setLoading(false)
-      window.location.href = "/home"
-    }, 1000)
+      setLoading(false);
+      window.location.href = '/home';
+    }, 1000);
   }
 
   return (
@@ -54,7 +53,7 @@ export function LoginForm() {
           <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
           <Input
             id="password"
-            type={showPassword ? "text" : "password"}
+            type={showPassword ? 'text' : 'password'}
             placeholder="••••••••"
             className="pl-9 pr-9"
             required
@@ -75,22 +74,21 @@ export function LoginForm() {
       </div>
 
       <Button type="submit" className="w-full" disabled={loading}>
-        {loading ? "Entrando..." : "Entrar"}
+        {loading ? 'Entrando...' : 'Entrar'}
       </Button>
     </form>
-  )
+  );
 }
-
 
 export default function LoginPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-zinc-700 to-zinc-950 px-4">
-      <Card className="w-full max-w-sm shadow-lg">
+    <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-slate-950 via-slate-900 to-[#0b2238] px-4">
+      <Card className="w-full max-w-sm border-slate-200/80 bg-white/95 shadow-lg backdrop-blur dark:border-slate-700 dark:bg-slate-900/90">
         <CardHeader className="space-y-1 text-center">
-          <CardTitle className="text-2xl font-semibold tracking-tight">
+          <CardTitle className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-slate-100">
             Admin
           </CardTitle>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-slate-600 dark:text-slate-300">
             Acesse o painel administrativo
           </p>
         </CardHeader>
@@ -109,5 +107,5 @@ export default function LoginPage() {
         </CardFooter>
       </Card>
     </div>
-  )
+  );
 }

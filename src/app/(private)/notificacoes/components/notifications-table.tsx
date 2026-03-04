@@ -32,17 +32,19 @@ export function NotificationsTable({
           className: 'max-w-[500px] truncate',
           cell: (n) => (
             <div className="flex flex-col">
-              <span className="truncate font-medium text-gray-900">
+              <span className="truncate font-medium text-slate-900 dark:text-slate-100">
                 {n.content}
               </span>
-              <span className="text-xs text-gray-400">ID: {n.id}</span>
+              <span className="text-xs text-slate-500 dark:text-slate-400">
+                ID: {n.id}
+              </span>
             </div>
           ),
         },
         {
           header: 'Criado em',
           cell: (n) => (
-            <span className="text-xs text-gray-700">
+            <span className="text-xs text-slate-700 dark:text-slate-300">
               {formatDateTime(n.createdAt)}
             </span>
           ),
@@ -55,7 +57,7 @@ export function NotificationsTable({
               variant="ghost"
               size="icon"
               onClick={() => onView(n)}
-              className="text-blue-500 hover:bg-blue-50 hover:text-blue-600"
+              className="text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-500/15 dark:hover:text-blue-300"
             >
               <Eye className="h-4 w-4 " />
             </Button>
@@ -66,7 +68,7 @@ export function NotificationsTable({
             <Button
               variant="ghost"
               size="icon"
-              className="text-red-500 hover:bg-red-50 hover:text-red-600"
+              className="text-red-600 hover:bg-red-50 hover:text-red-700 dark:text-red-400 dark:hover:bg-red-500/15 dark:hover:text-red-300"
               onClick={() => onDelete(n)}
             >
               <Trash className="h-4 w-4" />

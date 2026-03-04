@@ -15,7 +15,7 @@ export function mapFloodLevel(floodLevelId: number) {
 
 export function mapStatus(status: FloodAreaStatus) {
   switch (status) {
-    case 'approved':
+    case 'completed':
       return 'Concluído';
     case 'rejected':
       return 'Rejeitado';

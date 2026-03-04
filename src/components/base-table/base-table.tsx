@@ -45,18 +45,17 @@ export function BaseTable<T>({
 
   if (!list || list.length === 0) {
     return (
-      <div className="rounded-xl border border-dashed bg-white p-10 text-center text-sm text-gray-500">
+      <div className="rounded-xl border border-dashed border-slate-300 bg-white p-10 text-center text-sm text-slate-500 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
         {emptyMessage}
       </div>
     );
   }
 
   return (
-    <div className="overflow-hidden rounded border bg-white shadow-sm">
+    <div className="overflow-hidden rounded border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <Table>
-        {/* Header fixo igual ao seu */}
         <TableHeader>
-          <TableRow className="bg-gray-50 text-xs uppercase tracking-wide text-gray-500">
+          <TableRow className="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-800/70 dark:text-slate-300">
             {columns.map((col) => (
               <TableHead key={col.header}>{col.header}</TableHead>
             ))}
@@ -67,16 +66,19 @@ export function BaseTable<T>({
           </TableRow>
         </TableHeader>
 
-        {/* Body fixo igual ao seu */}
         <TableBody>
           {list.map((item, index) => (
             <TableRow
               key={index}
               className="
-                group transition
+                group text-slate-800 transition
                 odd:bg-white
-                even:bg-gray-50/60
-                hover:bg-gray-100
+                even:bg-slate-50/70
+                hover:bg-slate-100
+                dark:text-slate-200
+                dark:odd:bg-slate-900
+                dark:even:bg-slate-800/40
+                dark:hover:bg-slate-800/80
               "
             >
               {/* Cells */}

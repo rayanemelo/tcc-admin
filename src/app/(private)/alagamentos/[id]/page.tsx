@@ -40,7 +40,7 @@ export default function AlagamentoDetalhesPage() {
 
     await updateFloodArea({
       id: floodArea.id,
-      active: status === 'approved',
+      active: status === 'completed',
       status,
       commentsAdmin: commentRef.current?.value?.trim() || null,
     });
@@ -160,9 +160,9 @@ export default function AlagamentoDetalhesPage() {
               </Button>
 
               <Button
-                className="flex-1"
+                className="flex-1 bg-[#3B6790] hover:bg-[#3B6790]/90 text-white"
                 disabled={isUpdating}
-                onClick={() => handleUpdateStatus('approved')}
+                onClick={() => handleUpdateStatus('completed')}
               >
                 Aprovar
               </Button>

@@ -1,6 +1,6 @@
 import { API } from './api';
 
-export type FloodAreaStatus = 'pending' | 'approved' | 'rejected';
+export type FloodAreaStatus = 'pending' | 'completed' | 'rejected';
 
 export type FloodAreaImage = {
   id: number;
