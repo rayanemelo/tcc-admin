@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useTranslation } from "react-i18next"
 
 type Props = {
   nivel: string | null
@@ -22,6 +23,8 @@ export function AlagamentosFilters({
   onNivelChange,
   onStatusChange,
 }: Props) {
+  const { t } = useTranslation()
+
   function clearFilters() {
     onNivelChange(null)
     onStatusChange(null)
@@ -30,7 +33,7 @@ export function AlagamentosFilters({
   return (
     <div className="flex flex-wrap items-center gap-2">
       <Button variant="outline" onClick={clearFilters}>
-        Limpar filtros
+        {t("actions.clear-filters")}
       </Button>
 
       {/* Select Nível */}
@@ -40,12 +43,12 @@ export function AlagamentosFilters({
         onValueChange={(value) => onNivelChange(value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Selecionar nível" />
+          <SelectValue placeholder={t("alagamentos.filters.level-placeholder")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Leve">Leve</SelectItem>
-          <SelectItem value="Moderado">Moderado</SelectItem>
-          <SelectItem value="Interditado">Interditado</SelectItem>
+          <SelectItem value="Leve">{t("flood-level.light")}</SelectItem>
+          <SelectItem value="Moderado">{t("flood-level.moderate")}</SelectItem>
+          <SelectItem value="Interditado">{t("flood-level.interdicted")}</SelectItem>
         </SelectContent>
       </Select>
 
@@ -56,12 +59,12 @@ export function AlagamentosFilters({
         onValueChange={(value) => onStatusChange(value)}
       >
         <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Selecionar status" />
+          <SelectValue placeholder={t("alagamentos.filters.status-placeholder")} />
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="Pendente">Pendente</SelectItem>
-          <SelectItem value="Concluído">Concluído</SelectItem>
-          <SelectItem value="Rejeitado">Rejeitado</SelectItem>
+          <SelectItem value="Pendente">{t("flood-status.pending")}</SelectItem>
+          <SelectItem value="Concluído">{t("flood-status.completed")}</SelectItem>
+          <SelectItem value="Rejeitado">{t("flood-status.rejected")}</SelectItem>
         </SelectContent>
       </Select>
     </div>

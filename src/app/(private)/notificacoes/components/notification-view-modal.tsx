@@ -7,6 +7,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Notification } from '@/services/notification';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   notification: Notification | null;
@@ -14,6 +15,8 @@ type Props = {
 };
 
 export function NotificationViewModal({ notification, onClose }: Props) {
+  const { t } = useTranslation();
+
   if (!notification) return null;
 
   return (
@@ -24,7 +27,7 @@ export function NotificationViewModal({ notification, onClose }: Props) {
         aria-describedby={undefined}
       >
         <DialogHeader>
-          <DialogTitle>Visualizar notificação</DialogTitle>
+          <DialogTitle>{t('notifications.view.title')}</DialogTitle>
         </DialogHeader>
 
         <p className="whitespace-pre-line text-sm">{notification.content}</p>

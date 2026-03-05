@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Faq, FaqService } from '../services/faq';
 import { useState } from 'react';
-import { toast } from "sonner";
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 const service = new FaqService();
 
@@ -14,52 +15,47 @@ export type ModalState =
 
 
 export function useFaq() {
-  const queryClient = useQueryClient()
-  const [modal, setModal] = useState<ModalState>(null)
+  const { t } = useTranslation();
+  const queryClient = useQueryClient();
+  const [modal, setModal] = useState<ModalState>(null);
 
   const { data: faqList, isLoading, error } = useQuery({
     queryKey: ['faqList'],
     queryFn: () => service.getFaqList(),
-  })
+  });
 
   const createMutation = useMutation({
     mutationFn: (faq: Partial<Faq>) => service.createFaq(faq),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['faqList'] })
-      toast.success('Pergunta criada com sucesso.')
+      queryClient.invalidateQueries({ queryKey: ['faqList'] });
+      toast.success(t('faq.toast.create-success'));
     },
     onError: () => {
-      toast.error('Não foi possível criar a pergunta. Tente novamente mais tarde.'
-      );
+      toast.error(t('faq.toast.create-error'));
     },
-  })
+  });
 
   const updateMutation = useMutation({
-    mutationFn: (faq: Partial<Faq>) =>
-      service.updateFaq(faq.id!, faq),
+    mutationFn: (faq: Partial<Faq>) => service.updateFaq(faq.id!, faq),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['faqList'] })
-      toast.success('Pergunta atualizada com sucesso.')
+      queryClient.invalidateQueries({ queryKey: ['faqList'] });
+      toast.success(t('faq.toast.update-success'));
     },
     onError: () => {
-      toast.error(
-        'Não foi possível salvar as alterações. Tente novamente mais tarde.'
-      );
+      toast.error(t('faq.toast.update-error'));
     },
-  })
+  });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => service.deleteFaq(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['faqList'] })
-      toast.success('Pergunta excluída com sucesso.')
+      queryClient.invalidateQueries({ queryKey: ['faqList'] });
+      toast.success(t('faq.toast.delete-success'));
     },
     onError: () => {
-      toast.error(
-        'Não foi possível excluir a pergunta. Tente novamente mais tarde.'
-      );
+      toast.error(t('faq.toast.delete-error'));
     },
-  })
+  });
 
   return {
     error,
@@ -81,5 +77,5 @@ export function useFaq() {
     onEdit: (faq: Faq) => setModal({ type: 'edit', faq }),
     onView: (faq: Faq) => setModal({ type: 'view', faq }),
     onDelete: (faq: Faq) => setModal({ type: 'delete', faq }),
-  }
+  };
 }

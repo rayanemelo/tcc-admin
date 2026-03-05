@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -22,6 +23,7 @@ type Props = {
 };
 
 export function FaqFormModal({ faq, onClose, onSave, isSaving }: Props) {
+  const { t } = useTranslation();
   const questionRef = useRef<HTMLInputElement>(null);
   const answerRef = useRef<HTMLTextAreaElement>(null);
 
@@ -43,12 +45,10 @@ export function FaqFormModal({ faq, onClose, onSave, isSaving }: Props) {
       >
         <DialogHeader>
           <DialogTitle>
-            {faq ? 'Editar pergunta' : 'Adicionar pergunta'}
+            {faq ? t('faq.form.edit-title') : t('faq.form.create-title')}
           </DialogTitle>
           <DialogDescription className="text-sm">
-            {faq
-              ? 'Edite os dados da pergunta frequente abaixo.'
-              : 'Preencha os dados da nova pergunta frequente abaixo.'}
+            {faq ? t('faq.form.edit-description') : t('faq.form.create-description')}
           </DialogDescription>
         </DialogHeader>
 
@@ -63,8 +63,8 @@ export function FaqFormModal({ faq, onClose, onSave, isSaving }: Props) {
             required
             ref={questionRef}
             name="question"
-            label="Pergunta"
-            placeholder="Digite a pergunta"
+            label={t('table.question')}
+            placeholder={t('faq.form.question-placeholder')}
             defaultValue={faq?.question ?? ''}
             min={1}
             max={500}
@@ -74,8 +74,8 @@ export function FaqFormModal({ faq, onClose, onSave, isSaving }: Props) {
             required
             ref={answerRef}
             name="answer"
-            label="Resposta"
-            placeholder="Digite a resposta"
+            label={t('table.answer')}
+            placeholder={t('faq.form.answer-placeholder')}
             defaultValue={faq?.answer ?? ''}
             maxLength={1000}
             minLength={1}
@@ -84,14 +84,14 @@ export function FaqFormModal({ faq, onClose, onSave, isSaving }: Props) {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={onClose} disabled={isSaving}>
-              Cancelar
+              {t('actions.cancel')}
             </Button>
 
             <ButtonWithLoader
               type="submit"
               disabled={isSaving}
               isLoading={isSaving}
-              text="Salvar"
+              text={t('actions.save')}
             />
           </div>
         </form>

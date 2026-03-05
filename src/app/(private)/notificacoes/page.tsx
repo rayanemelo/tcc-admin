@@ -6,8 +6,10 @@ import { Separator } from '@/components/ui/separator';
 import { PlusIcon } from 'lucide-react';
 import { useNotification } from '@/hooks/use-notification';
 import { NotificationsTable } from './components/notifications-table';
+import { useTranslation } from 'react-i18next';
 
 export default function NotificationPage() {
+  const { t } = useTranslation();
   const {
     notificationList,
     isLoading,
@@ -27,7 +29,7 @@ export default function NotificationPage() {
       <header className="flex items-center justify-between">
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold dark:text-white text-gray-900 ">
-            Notificações
+            {t('menu.notificacoes')}
           </h1>
         </div>
         <Button
@@ -35,7 +37,7 @@ export default function NotificationPage() {
           className="flex items-center gap-2 bg-[#3B6790] text-white hover:bg-[#2C4F6E]"
         >
           <PlusIcon className="text-white" />
-          Nova notificação
+          {t('notifications.new')}
         </Button>
       </header>
       <Separator />

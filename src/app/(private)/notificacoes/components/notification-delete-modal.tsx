@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { ButtonWithLoader } from '@/components/button-with-loader/button-with-loader';
+import { useTranslation } from 'react-i18next';
 
 type Props = {
   onClose: () => void;
@@ -20,6 +21,8 @@ export function NotificationDeleteModal({
   onConfirm,
   isDeleting,
 }: Props) {
+  const { t } = useTranslation();
+
   async function handleConfirm() {
     await onConfirm();
     onClose();
@@ -28,19 +31,19 @@ export function NotificationDeleteModal({
     <Dialog open onOpenChange={onClose}>
       <DialogContent aria-describedby={undefined}>
         <DialogHeader>
-          <DialogTitle>Deseja realmente excluir esta notificação?</DialogTitle>
+          <DialogTitle>{t('notifications.delete.confirm-title')}</DialogTitle>
         </DialogHeader>
 
         <div className="flex justify-end gap-2 pt-4">
           <Button variant="outline" onClick={onClose}>
-            Cancelar
+            {t('actions.cancel')}
           </Button>
 
           <ButtonWithLoader
             onClick={handleConfirm}
             disabled={isDeleting}
             isLoading={isDeleting}
-            text="Excluir"
+            text={t('actions.delete')}
           />
         </div>
       </DialogContent>

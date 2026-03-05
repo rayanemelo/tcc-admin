@@ -1,6 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   TableBody,
@@ -41,6 +42,7 @@ export function BaseTable<T>({
   emptyMessage,
   skeleton,
 }: Props<T>) {
+  const { t } = useTranslation();
   if (isLoading) return skeleton;
 
   if (!list || list.length === 0) {
@@ -61,7 +63,9 @@ export function BaseTable<T>({
             ))}
 
             {actions && (
-              <TableHead className="w-40 text-center">Ações</TableHead>
+              <TableHead className="w-40 text-center">
+                {t('table.actions')}
+              </TableHead>
             )}
           </TableRow>
         </TableHeader>

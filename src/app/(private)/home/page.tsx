@@ -1,55 +1,59 @@
+'use client';
 import Link from 'next/link';
 import {
+  ArrowRight,
   Bell,
   CircleHelp,
   LifeBuoy,
   Map,
   Waves,
-  ArrowRight,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const menuCards = [
   {
-    title: 'Análise de Alagamentos',
+    titleKey: 'menu.alagamentos',
     href: '/alagamentos',
     icon: Waves,
   },
   {
-    title: 'Mapa',
+    titleKey: 'menu.mapa',
     href: '/mapa',
     icon: Map,
   },
   {
-    title: 'Notificações',
+    titleKey: 'menu.notificacoes',
     href: '/notificacoes',
     icon: Bell,
   },
   {
-    title: 'Perguntas Frequentes',
+    titleKey: 'menu.perguntas-frequentes',
     href: '/perguntas-frequentes',
     icon: CircleHelp,
   },
   {
-    title: 'Suporte',
+    titleKey: 'menu.suporte',
     href: '/suporte',
     icon: LifeBuoy,
   },
 ];
 
 export default function HomePage() {
+  const { t } = useTranslation();
+
   return (
     <div className="space-y-6 p-6">
       <header className="space-y-2">
         <h1 className="text-2xl font-semibold text-slate-900 dark:text-white">
-          Painel Administrativo
+          {t('home.title')}
         </h1>
         <p className="text-sm text-slate-600 dark:text-slate-300">
-          Acesse rapidamente os módulos principais.
+          {t('home.subtitle')}
         </p>
       </header>
 
       <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {menuCards.map(({ title, href, icon: Icon }) => (
+        {menuCards.map(({ titleKey, href, icon: Icon }) => (
           <Link
             key={href}
             href={href}
@@ -61,7 +65,7 @@ export default function HomePage() {
               </div>
 
               <span className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
-                {title}
+                {t(titleKey)}
               </span>
             </div>
 

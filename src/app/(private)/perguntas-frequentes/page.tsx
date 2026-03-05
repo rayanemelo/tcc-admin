@@ -6,8 +6,10 @@ import { useFaq } from '@/hooks/use-faq';
 import { FaqModalController } from './components/faq-modal-controller';
 import { Separator } from '@/components/ui/separator';
 import { PlusIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export default function FaqPage() {
+  const { t } = useTranslation();
   const {
     faqList,
     isLoading,
@@ -30,7 +32,7 @@ export default function FaqPage() {
       <header className="flex items-center justify-between">
         <div className="flex flex-col">
           <h1 className="text-2xl font-semibold dark:text-white text-gray-900 ">
-            Perguntas Frequentes
+            {t('menu.perguntas-frequentes')}
           </h1>
         </div>
         <Button
@@ -38,7 +40,7 @@ export default function FaqPage() {
           className="flex items-center gap-2 bg-[#3B6790] text-white hover:bg-[#2C4F6E]"
         >
           <PlusIcon className="text-white" />
-          Nova pergunta
+          {t('faq.new')}
         </Button>
       </header>
       <Separator />

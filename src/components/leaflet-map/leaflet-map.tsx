@@ -2,6 +2,7 @@
 
 import 'leaflet/dist/leaflet.css';
 import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { useTranslation } from 'react-i18next';
 
 export function createLucideMarker(level: string) {
   return L.divIcon({
@@ -27,6 +28,8 @@ export function createLucideMarker(level: string) {
 
 // FIXME: corrigir tipagem | renderizar somente areas com status 'Aprovado'
 export default function LeafletMap({ floodAreas }: any) {
+  const { t } = useTranslation();
+
   return (
     <MapContainer
       center={[-29.6509, -50.7814]}
@@ -47,8 +50,12 @@ export default function LeafletMap({ floodAreas }: any) {
           <Popup>
             <div className="space-y-1 text-sm">
               <p className="font-medium">{area.address}</p>
-              <p>Nível: {area.level}</p>
-              <p>Status: {area.status}</p>
+              <p>
+                {t('map.popup.level')}: {area.level}
+              </p>
+              <p>
+                {t('map.popup.status')}: {area.status}
+              </p>
             </div>
           </Popup>
         </Marker>

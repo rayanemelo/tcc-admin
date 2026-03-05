@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogContent,
@@ -19,6 +20,7 @@ type Props = {
 };
 
 export function NotificationFormModal({ isSaving, onClose, onSave }: Props) {
+  const { t } = useTranslation();
   const [content, setContent] = useState('');
 
   function handleSubmit() {
@@ -38,7 +40,7 @@ export function NotificationFormModal({ isSaving, onClose, onSave }: Props) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
-          <DialogTitle>Nova notificação</DialogTitle>
+          <DialogTitle>{t('notifications.form.title')}</DialogTitle>
         </DialogHeader>
 
         <form
@@ -49,7 +51,7 @@ export function NotificationFormModal({ isSaving, onClose, onSave }: Props) {
           }}
         >
           <Textarea
-            placeholder="Conteúdo da notificação"
+            placeholder={t('notifications.form.placeholder')}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             className="min-h-30"
@@ -57,14 +59,14 @@ export function NotificationFormModal({ isSaving, onClose, onSave }: Props) {
 
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={onClose}>
-              Cancelar
+              {t('actions.cancel')}
             </Button>
 
             <ButtonWithLoader
               type="submit"
               disabled={isSaving}
               isLoading={isSaving}
-              text="Salvar"
+              text={t('actions.save')}
             />
           </div>
         </form>

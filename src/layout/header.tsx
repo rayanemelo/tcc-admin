@@ -3,20 +3,23 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { LogOut, Menu, Waves, X } from 'lucide-react';
+import { LanguageToggle } from './components/language-toggle';
 import { ThemeToggle } from './components/theme-toggle';
 
 const navItems = [
-  { label: 'Análise de Alagamentos', href: '/alagamentos' },
-  { label: 'Mapa', href: '/mapa' },
-  { label: 'Notificações', href: '/notificacoes' },
-  { label: 'Perguntas Frequentes', href: '/perguntas-frequentes' },
-  { label: 'Suporte', href: '/suporte' },
+  { key: 'menu.alagamentos', href: '/alagamentos' },
+  { key: 'menu.mapa', href: '/mapa' },
+  { key: 'menu.notificacoes', href: '/notificacoes' },
+  { key: 'menu.perguntas-frequentes', href: '/perguntas-frequentes' },
+  { key: 'menu.suporte', href: '/suporte' },
 ];
 
 export function Header() {
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -60,8 +63,8 @@ export function Header() {
         </Link>
 
         {/* Navegação Desktop */}
-        <nav className="hidden md:flex items-center gap-8">
-          {navItems.map(({ label, href }) => (
+        <nav className="hidden lg:flex items-center gap-8">
+          {navItems.map(({ key, href }) => (
             <Link
               key={href}
               href={href}
@@ -71,14 +74,14 @@ export function Header() {
                   : 'text-slate-600 hover:text-slate-900 dark:text-slate-300 dark:hover:text-white'
               }`}
             >
-              {label}
+              {t(key)}
             </Link>
           ))}
         </nav>
 
         {/* Botão Mobile */}
         <button
-          className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 md:hidden dark:text-slate-200 dark:hover:bg-slate-800"
+          className="rounded-md p-2 text-slate-700 transition-colors hover:bg-slate-100 lg:hidden dark:text-slate-200 dark:hover:bg-slate-800"
           onClick={() => setOpen(true)}
           aria-label="Abrir menu"
         >
@@ -86,7 +89,8 @@ export function Header() {
         </button>
 
         {/* Usuário Desktop + Toggle */}
-        <div className="hidden items-center gap-3 md:flex">
+        <div className="hidden items-center gap-3 lg:flex">
+          <LanguageToggle />
           <ThemeToggle />
 
           <div className="relative" ref={userMenuRef}>
@@ -116,7 +120,7 @@ export function Header() {
                   onClick={handleLogout}
                 >
                   <LogOut className="h-4 w-4" />
-                  Sair
+                  {t('actions.logout')}
                 </button>
               </div>
             )}
@@ -126,29 +130,28 @@ export function Header() {
 
       {/* Overlay Mobile */}
       {open && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <div
             className="fixed inset-0 z-[120] h-lvh bg-slate-950/45 backdrop-blur-[1px]"
             onClick={() => setOpen(false)}
             aria-hidden="true"
           />
 
-          <div className="fixed right-0 top-0 z-[130] h-dvh w-72 border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
+          <div className="fixed right-0 top-0 z-[130] h-dvh w-80 max-w-[88vw] border-l border-slate-200 bg-white shadow-2xl dark:border-slate-800 dark:bg-slate-900">
             {/* Header Mobile */}
-            <div className="flex items-center justify-between border-b border-slate-200 px-4 py-4 dark:border-slate-800">
-              <div className="flex items-center gap-3">
-                <Avatar className="h-9 w-9">
-                  <AvatarFallback className="bg-[#3B6790] text-white">
-                    AD
-                  </AvatarFallback>
-                </Avatar>
-                <span className="text-sm font-medium text-slate-800 dark:text-slate-100">
-                  Admin
-                </span>
-              </div>
+            <div className="space-y-3 border-b border-slate-200 px-4 py-4 dark:border-slate-800">
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <Avatar className="h-9 w-9">
+                    <AvatarFallback className="bg-[#3B6790] text-white">
+                      AD
+                    </AvatarFallback>
+                  </Avatar>
+                  <span className="truncate text-sm font-medium text-slate-800 dark:text-slate-100">
+                    Admin
+                  </span>
+                </div>
 
-              <div className="flex items-center gap-2">
-                <ThemeToggle />
                 <button
                   onClick={() => setOpen(false)}
                   aria-label="Fechar menu"
@@ -157,11 +160,16 @@ export function Header() {
                   <X className="h-5 w-5" />
                 </button>
               </div>
+
+              <div className="flex items-center justify-between gap-2">
+                <LanguageToggle />
+                <ThemeToggle />
+              </div>
             </div>
 
             {/* Navegação Mobile */}
             <nav className="flex flex-col px-4 py-6 bg-white dark:bg-slate-900">
-              {navItems.map(({ label, href }) => (
+              {navItems.map(({ key, href }) => (
                 <Link
                   key={href}
                   href={href}
@@ -172,7 +180,7 @@ export function Header() {
                       : 'text-slate-700 hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800'
                   }`}
                 >
-                  {label}
+                  {t(key)}
                 </Link>
               ))}
             </nav>
@@ -184,7 +192,7 @@ export function Header() {
                 onClick={handleLogout}
               >
                 <LogOut className="h-4 w-4" />
-                Sair
+                {t('actions.logout')}
               </button>
             </div>
           </div>

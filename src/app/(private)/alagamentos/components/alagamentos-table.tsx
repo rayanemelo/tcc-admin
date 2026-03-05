@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { Eye, MapPin } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { BaseTable } from '@/components/base-table/base-table';
 import { Badge } from '@/components/ui/badge';
@@ -24,16 +25,43 @@ type Props = {
 
 export function AlagamentosTable({ data }: Props) {
   const router = useRouter();
+  const { t } = useTranslation();
+
+  function translateFloodLevel(level: string) {
+    switch (level) {
+      case 'Leve':
+        return t('flood-level.light');
+      case 'Moderado':
+        return t('flood-level.moderate');
+      case 'Interditado':
+        return t('flood-level.interdicted');
+      default:
+        return level;
+    }
+  }
+
+  function translateFloodStatus(status: string) {
+    switch (status) {
+      case 'Pendente':
+        return t('flood-status.pending');
+      case 'Concluído':
+        return t('flood-status.completed');
+      case 'Rejeitado':
+        return t('flood-status.rejected');
+      default:
+        return status;
+    }
+  }
 
   return (
     <BaseTable<Item>
       list={data}
       isLoading={false}
       skeleton={null}
-      emptyMessage="Nenhum relato encontrado com os filtros selecionados."
+      emptyMessage={t('alagamentos.table.empty')}
       columns={[
         {
-          header: 'Endereço',
+          header: t('table.address'),
           className: 'max-w-[500px] truncate',
           cell: (item) => (
             <div className="flex flex-col">
@@ -45,25 +73,29 @@ export function AlagamentosTable({ data }: Props) {
                 {item.endereco}
               </button>
               <span className="text-xs text-slate-500 dark:text-slate-400">
-                ID: {item.id}
+                {t('table.id-prefix')} {item.id}
               </span>
             </div>
           ),
         },
         {
-          header: 'Nível',
+          header: t('table.level'),
           cell: (item) => (
-            <Badge className={nivelVariant(item.nivel)}>{item.nivel}</Badge>
+            <Badge className={nivelVariant(item.nivel)}>
+              {translateFloodLevel(item.nivel)}
+            </Badge>
           ),
         },
         {
-          header: 'Status',
+          header: t('table.status'),
           cell: (item) => (
-            <Badge className={statusVariant(item.status)}>{item.status}</Badge>
+            <Badge className={statusVariant(item.status)}>
+              {translateFloodStatus(item.status)}
+            </Badge>
           ),
         },
         {
-          header: 'Data',
+          header: t('table.date'),
           cell: (item) => (
             <span className="text-xs text-slate-700 dark:text-slate-300">
               {item.data}
@@ -79,6 +111,8 @@ export function AlagamentosTable({ data }: Props) {
               size="icon"
               className="text-blue-600 hover:bg-blue-50 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-500/15 dark:hover:text-blue-300"
               onClick={() => router.push(`/alagamentos/${item.id}`)}
+              aria-label={t('actions.view')}
+              title={t('actions.view')}
             >
               <Eye className="h-4 w-4" />
             </Button>
@@ -96,6 +130,8 @@ export function AlagamentosTable({ data }: Props) {
                   '_blank'
                 )
               }
+              aria-label={t('actions.open-map')}
+              title={t('actions.open-map')}
             >
               <MapPin className="h-4 w-4" />
             </Button>
