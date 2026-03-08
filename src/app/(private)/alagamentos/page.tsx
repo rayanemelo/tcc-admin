@@ -21,6 +21,7 @@ export default function AlagamentosPage() {
       endereco: item.address,
       nivel: mapFloodLevel(item.floodLevelId),
       status: mapStatus(item.status),
+      active: item.active,
       data: formatDateTime(item.createdAt),
       lat: Number(item.latitude),
       lng: Number(item.longitude),

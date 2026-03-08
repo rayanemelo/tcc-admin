@@ -1,14 +1,25 @@
 'use client';
 
-import { useMemo, useRef } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
+import { Loader2Icon } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { nivelVariant, statusVariant } from '@/utils/styles';
 import { IAAnalysis } from '@/components/ia-analysis/ia-analysis';
@@ -16,6 +27,10 @@ import { useFloodArea } from '@/hooks/use-flood-area';
 import { formatDateTime } from '@/utils/format-date-time';
 import { FloodAreaStatus } from '@/services/flood-area';
 import { mapFloodLevel, mapStatus } from '@/utils/mapping';
+import { AlagamentoDetalhesLoading } from './components/alagamento-detalhes-loading';
+import { AlagamentoDetalhesNotFound } from './components/alagamentos-detalhes-not-found';
+import { AlagamentoDetalhesError } from './components/alagamento-detalhes-error';
+import { cn } from '@/lib/utils';
 
 const FALLBACK_IMAGE_URL =
   'https://images.unsplash.com/photo-1639164631432-fe23c2cfcee7?q=80&w=1976&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
@@ -25,6 +40,10 @@ export default function AlagamentoDetalhesPage() {
   const params = useParams<{ id: string }>();
   const id = useMemo(() => Number(params.id), [params.id]);
   const commentRef = useRef<HTMLTextAreaElement>(null);
+  const [pendingAction, setPendingAction] = useState<
+    'approve' | 'reject' | 'toggle-active' | null
+  >(null);
+  const [isActiveConfirmOpen, setIsActiveConfirmOpen] = useState(false);
   const { getFloodAreaById, updateFloodArea, isUpdating } = useFloodArea();
 
   const {
@@ -40,12 +59,36 @@ export default function AlagamentoDetalhesPage() {
   async function handleUpdateStatus(status: FloodAreaStatus) {
     if (!floodArea) return;
 
-    await updateFloodArea({
-      id: floodArea.id,
-      active: status === 'completed',
-      status,
-      commentsAdmin: commentRef.current?.value?.trim() || null,
-    });
+    const action = status === 'completed' ? 'approve' : 'reject';
+    setPendingAction(action);
+
+    try {
+      await updateFloodArea({
+        id: floodArea.id,
+        active: floodArea.active,
+        status,
+        commentsAdmin: commentRef.current?.value?.trim() || null,
+      });
+    } finally {
+      setPendingAction(null);
+    }
+  }
+
+  async function handleToggleActive() {
+    if (!floodArea) return;
+
+    setPendingAction('toggle-active');
+
+    try {
+      await updateFloodArea({
+        id: floodArea.id,
+        active: !floodArea.active,
+        status: floodArea.status,
+        commentsAdmin: commentRef.current?.value?.trim() || null,
+      });
+    } finally {
+      setPendingAction(null);
+    }
   }
 
   function translateFloodLevel(level: string) {
@@ -75,36 +118,19 @@ export default function AlagamentoDetalhesPage() {
   }
 
   if (!Number.isFinite(id)) {
-    return (
-      <div className="space-y-6 p-6">
-        <h1 className="text-2xl font-semibold">{t('menu.alagamentos')}</h1>
-        <div className="rounded-md border bg-white p-6 text-sm text-red-500">
-          {t('alagamentos.details.invalid-id')}
-        </div>
-      </div>
-    );
+    return <AlagamentoDetalhesNotFound />;
   }
 
   if (isLoading) {
-    return (
-      <div className="space-y-6 p-6">
-        <h1 className="text-2xl font-semibold">{t('menu.alagamentos')}</h1>
-        <div className="rounded-md border bg-white p-6 text-sm text-muted-foreground">
-          {t('alagamentos.details.loading')}
-        </div>
-      </div>
-    );
+    return <AlagamentoDetalhesLoading />;
   }
 
-  if (error || !floodArea) {
-    return (
-      <div className="space-y-6 p-6">
-        <h1 className="text-2xl font-semibold">{t('menu.alagamentos')}</h1>
-        <div className="rounded-md border bg-white p-6 text-sm text-red-500">
-          {t('alagamentos.details.load-error')}
-        </div>
-      </div>
-    );
+  if (error) {
+    return <AlagamentoDetalhesError />;
+  }
+
+  if (!floodArea) {
+    return <AlagamentoDetalhesNotFound />;
   }
 
   const nivel = mapFloodLevel(floodArea.floodLevelId);
@@ -171,6 +197,57 @@ export default function AlagamentoDetalhesPage() {
               </h3>
               <p className="text-sm">{formatDateTime(floodArea.createdAt)}</p>
             </div>
+
+            <div className="space-y-3 rounded-lg border bg-slate-50/70 p-4 md:col-span-2">
+              <div className="flex items-center justify-between gap-4">
+                <div>
+                  <h3 className="text-sm font-medium text-muted-foreground">
+                    {t('alagamentos.details.system-status')}
+                  </h3>
+                  <Badge
+                    className={
+                      floodArea.active
+                        ? 'mt-2 border border-emerald-200 bg-emerald-100 text-emerald-700'
+                        : 'mt-2 border border-red-200 bg-red-100 text-red-700'
+                    }
+                  >
+                    {floodArea.active
+                      ? t('alagamentos.details.active')
+                      : t('alagamentos.details.inactive')}
+                  </Badge>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  {pendingAction === 'toggle-active' ? (
+                    <Loader2Icon className="size-4 animate-spin text-muted-foreground" />
+                  ) : null}
+
+                  <button
+                    type="button"
+                    role="switch"
+                    aria-checked={floodArea.active}
+                    aria-label={
+                      floodArea.active
+                        ? t('actions.deactivate')
+                        : t('actions.activate')
+                    }
+                    onClick={() => setIsActiveConfirmOpen(true)}
+                    disabled={isUpdating}
+                    className={cn(
+                      'relative inline-flex h-6 w-10 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#3B6790] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-70',
+                      floodArea.active ? 'bg-emerald-600' : 'bg-slate-300'
+                    )}
+                  >
+                    <span
+                      className={cn(
+                        'inline-block h-4 w-4 rounded-full bg-white transition-transform',
+                        floodArea.active ? 'translate-x-5' : 'translate-x-1'
+                      )}
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
             <div className="md:col-span-2">
               <IAAnalysis />
             </div>
@@ -187,14 +264,18 @@ export default function AlagamentoDetalhesPage() {
               />
             </div>
 
-            <div className="flex gap-3 pt-4 md:col-span-2">
+            <div className="flex flex-col gap-3 pt-4 md:col-span-2 md:flex-row">
               <Button
                 variant="outline"
                 className="flex-1"
                 disabled={isUpdating}
                 onClick={() => handleUpdateStatus('rejected')}
               >
-                {t('actions.reject')}
+                {pendingAction === 'reject' ? (
+                  <Loader2Icon className="size-5 animate-spin" />
+                ) : (
+                  t('actions.reject')
+                )}
               </Button>
 
               <Button
@@ -202,12 +283,56 @@ export default function AlagamentoDetalhesPage() {
                 disabled={isUpdating}
                 onClick={() => handleUpdateStatus('completed')}
               >
-                {t('actions.approve')}
+                {pendingAction === 'approve' ? (
+                  <Loader2Icon className="size-5 animate-spin" />
+                ) : (
+                  t('actions.approve')
+                )}
               </Button>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      <AlertDialog open={isActiveConfirmOpen} onOpenChange={setIsActiveConfirmOpen}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              {t('alagamentos.details.toggle-active.confirm-title')}
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              {floodArea.active
+                ? t('alagamentos.details.toggle-active.confirm-description-deactivate')
+                : t('alagamentos.details.toggle-active.confirm-description-activate')}
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isUpdating}>
+              {t('actions.cancel')}
+            </AlertDialogCancel>
+            <AlertDialogAction
+              disabled={isUpdating}
+              onClick={async (event) => {
+                event.preventDefault();
+                try {
+                  await handleToggleActive();
+                  setIsActiveConfirmOpen(false);
+                } catch {
+                  // Toast is handled inside the mutation hook.
+                }
+              }}
+            >
+              {isUpdating && pendingAction === 'toggle-active' ? (
+                <Loader2Icon className="size-4 animate-spin" />
+              ) : floodArea.active ? (
+                t('actions.deactivate')
+              ) : (
+                t('actions.activate')
+              )}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
